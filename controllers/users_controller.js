@@ -6,17 +6,17 @@ module.exports.profile = (req, res) => {
 }
 
 // Render the Sign Up Page
-module.exports.signUp = (req, res) =>{
-    return res.render('user_sign_up',{
-        title : "Major Project | Sign Up"
+module.exports.signUp = (req, res) => {
+    return res.render('user_sign_up', {
+        title: "Major Project | Sign Up"
     })
 }
 
 
 // Render the Sign In Page
-module.exports.signIn = (req, res) =>{
+module.exports.signIn = (req, res) => {
     return res.render('user_sign_in', {
-        title : "Major Project | Sign In"
+        title: "Major Project | Sign In"
     })
 }
 
@@ -60,6 +60,38 @@ module.exports.create = async (req, res) => {
 }
 
 //Sign In and Create a session for the user
-module.exports.createSession = (req, res) => {
-    //TODO later
+module.exports.createSession = async (req, res) => {
+    // steps to authenticate
+
+    try {
+        // find the user
+        const user = await User.findOne({ email: req.body.email });
+
+        if (user) {
+            //handle user found
+            if (user.password != req.body.password){
+                return res.redirect('back');
+            }
+
+            //handle password which don't match
+            res.cookie('user_id', user.id);
+            return res.redirect('/users/profile');
+            
+        } else {
+            //handle user not found
+            return res.redirect('back');
+        }
+    }
+    catch (err) {
+        console.log('Error:', err.message);
+        return res.status(500).send('Internal Server Error');
+    }
+
+
+
+
+    //handle session creation
+
+
+
 }
