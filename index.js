@@ -18,6 +18,10 @@ const passport = require("passport");
 
 const passportLocal = require("./config/passport-local-strategy");
 
+const MongoStore = require("connect-mongodb-session")(session);
+
+
+
 app.use(express.urlencoded());
 
 app.use(cookieParser());
@@ -34,6 +38,7 @@ app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
+// mongo store is used the session cookie in the db
 app.use(
   session({
     name: "Major Project",
@@ -44,6 +49,15 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 100,
     },
+    store : new MongoStore(
+      {
+        uri : 'mongodb://127.0.0.1:27017/major_development',
+        autoRemove: 'disabled'
+      },
+      (err)=>{
+        console.log(err || 'connect-mongodb setup ok');
+      }
+    )
   })
 );
 
