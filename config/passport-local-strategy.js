@@ -15,7 +15,6 @@ passport.use(
       // find a user and establish the identity
       try {
         let user = await User.findOne({ email: email });
-
         if (!user || user.password != password) {
           req.flash("error", "Invalid Username/Password");
           return done(null, false);
