@@ -23,18 +23,22 @@ module.exports.create = async (req, res) => {
   }
 };
 
-module.exports.destroy = (req, res)=>{
-  Comment.findById(req.params.id, (err, comment)=>{
+module.exports.destroy = async(req, res)=>{
+  try{
+  const comment = await Comment.findById(req.params.id);
     if (comment.user == req.user.id){
       let postId = comment.post;
 
       comment.remove();
 
-      Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}}, (err, post)=>{
+      let post = await Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}});
         return res.redirect('back');
-      })
     }else{
       return res.redirect('back');
     }
-  })
+  }catch(err){
+    console.log('Error', err);
+    return;
+  }
+
 }
