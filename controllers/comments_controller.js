@@ -1,7 +1,6 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 
-
 module.exports.create = async (req, res) => {
   try {
     const post = await Post.findById(req.body.post);
@@ -11,34 +10,34 @@ module.exports.create = async (req, res) => {
         post: req.body.post,
         user: req.user._id,
       });
-        post.comments.push(comment);
-        post.save();
+      post.comments.push(comment);
+      post.save();
 
-        res.redirect("/");
-      };
+      res.redirect("/");
     }
-  catch (err) {
+  } catch (err) {
     console.log(`error in creating a post ${err}`);
     return;
   }
 };
 
-module.exports.destroy = async(req, res)=>{
-  try{
-  const comment = await Comment.findById(req.params.id);
-    if (comment.user == req.user.id){
+module.exports.destroy = async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (comment.user == req.user.id) {
       let postId = comment.post;
 
       comment.remove();
 
-      let post = await Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}});
-        return res.redirect('back');
-    }else{
-      return res.redirect('back');
+      let post = await Post.findByIdAndUpdate(postId, {
+        $pull: { comments: req.params.id },
+      });
+      return res.redirect("back");
+    } else {
+      return res.redirect("back");
     }
-  }catch(err){
-    console.log('Error', err);
+  } catch (err) {
+    console.log("Error", err);
     return;
   }
-
-}
+};
