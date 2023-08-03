@@ -22,6 +22,7 @@ passport.use(
 
         return done(null, user);
       } catch (err) {
+        req.flash('error', err);
         console.log("error in signin", err);
       }
     }
