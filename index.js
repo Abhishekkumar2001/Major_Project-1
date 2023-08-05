@@ -18,13 +18,13 @@ const passport = require("passport");
 
 const passportLocal = require("./config/passport-local-strategy");
 
+const passportJWT = require("./config/passport-jwt-strategy");
+
 const MongoStore = require("connect-mongodb-session")(session);
 
-const flash = require('connect-flash');
+const flash = require("connect-flash");
 
 const customMware = require("./config/middleware");
-
-
 
 app.use(express.urlencoded());
 
@@ -32,11 +32,11 @@ app.use(cookieParser());
 
 app.use(express.static("./assets"));
 // make the uploads path available to the browser
-app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // extract style and scripts from sub pages into the layout
-app.set('layout extractStyles', true);
-app.set('layout extractScripts', true);
+app.set("layout extractStyles", true);
+app.set("layout extractScripts", true);
 
 app.use(expressLayouts);
 
@@ -55,15 +55,15 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 100,
     },
-    store : new MongoStore(
+    store: new MongoStore(
       {
-        uri : 'mongodb://127.0.0.1:27017/major_development',
-        autoRemove: 'disabled'
+        uri: "mongodb://127.0.0.1:27017/major_development",
+        autoRemove: "disabled",
       },
-      (err)=>{
-        console.log(err || 'connect-mongodb setup ok');
+      (err) => {
+        console.log(err || "connect-mongodb setup ok");
       }
-    )
+    ),
   })
 );
 
